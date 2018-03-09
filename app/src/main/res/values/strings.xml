@@ -5,5 +5,8 @@
     <string name="password">Password</string>
     <string name="please_enter_email">Please enter email</string>
     <string name="please_enter_valid_email">Please enter valid email</string>
-    <string name="short_password">Password should be at least 6 chars long</string>
+    <string name="password_should_be_at_least">Password should be at least</string>
+    <string name="chars_long">chars long</string>
+    <string name="wrong_credentials">Email or password is not correct</string>
+    <string name="something_went_wrong">Something went wrong please try again</string>
 </resources>
