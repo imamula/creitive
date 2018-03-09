@@ -3,11 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ivan.mamula.creitive.MainActivity">
-
-    <TextView
+    android:background="@drawable/splash_background"
+    tools:context="ivan.mamula.creitive.SplashScreenActivity">
+    <ProgressBar
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>
