@@ -5,8 +5,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/splash_background"
     tools:context="ivan.mamula.creitive.SplashScreenActivity">
+
     <ProgressBar
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

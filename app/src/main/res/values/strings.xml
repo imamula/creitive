@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CreITive</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="please_enter_email">Please enter email</string>
+    <string name="please_enter_valid_email">Please enter valid email</string>
+    <string name="short_password">Password should be at least 6 chars long</string>
 </resources>
