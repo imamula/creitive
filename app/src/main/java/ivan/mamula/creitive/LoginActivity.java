@@ -1,6 +1,7 @@
 package ivan.mamula.creitive;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -86,6 +87,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 && !response.body().getToken().isEmpty()) {
                             Constants.saveToken(response.body().getToken()
                                     , getApplicationContext());
+                            Intent showBlogsActivityIntent = new Intent(LoginActivity.this,
+                                    BlogsListActivity.class);
+                            startActivity(showBlogsActivityIntent);
+                            finish();
                         } else if (response != null && response.message() != null
                                 && response.message()
                                 .equalsIgnoreCase(Constants.WRONG_CREDENTIAL_MESSAGE)) {
