@@ -17,14 +17,18 @@ public class Constants {
     public static final String KEY_TOKEN = "save_UsER_Token";
     private static SharedPreferences mSharedPreferences = null;
     private static Editor mEditor = null;
-    public static final String LOGIN_HEADER="application/json";
-    public static final String WRONG_CREDENTIAL_MESSAGE="unauthorized";
-    public static final int PASSWORD_MIN_CHARS=6;
+    public static final String LOGIN_CONTENT_TYPE_HEADER_VALUE = "application/json";
+    public static final String LOGIN_CONTENT_TYPE_HEADER_NAME = "Content-Type";
+    public static final String ACCEPT_HEADER = "Accept: application/json";
+    public static final String WRONG_CREDENTIAL_MESSAGE = "unauthorized";
+    public static final int PASSWORD_MIN_CHARS = 6;
+
     public static void saveToken(String token, Context context) {
-        getEditor(context).putString(KEY_TOKEN,token).commit();
+        getEditor(context).putString(KEY_TOKEN, token).commit();
     }
-    public static String getToken(Context context){
-        return getSharedPreferences(context).getString(KEY_TOKEN,null );
+
+    public static String getToken(Context context) {
+        return getSharedPreferences(context).getString(KEY_TOKEN, null);
     }
 
     private static SharedPreferences getSharedPreferences(Context context) {

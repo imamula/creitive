@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setMenuEnabled(false);
         LoginRequestBody loginRequestBody = new LoginRequestBody(email, password);
         RetrofitClient.getRetrofitClient(getApplicationContext())
-                .login(loginRequestBody, Constants.LOGIN_HEADER)
+                .login(loginRequestBody, Constants.LOGIN_CONTENT_TYPE_HEADER_VALUE)
                 .enqueue(new Callback<LoginResponseModel>() {
                     @Override
                     public void onResponse(Call<LoginResponseModel> call
@@ -89,10 +89,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } else if (response != null && response.message() != null
                                 && response.message()
                                 .equalsIgnoreCase(Constants.WRONG_CREDENTIAL_MESSAGE)) {
-                            Toast.makeText(LoginActivity.this, R.string.wrong_credentials,
+                            Toast.makeText(getApplicationContext(), R.string.wrong_credentials,
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(LoginActivity.this, R.string.something_went_wrong,
+                            Toast.makeText(getApplicationContext(), R.string.something_went_wrong,
                                     Toast.LENGTH_SHORT).show();
                         }
                         setMenuEnabled(true);
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     @Override
                     public void onFailure(Call<LoginResponseModel> call, Throwable t) {
-                        Toast.makeText(LoginActivity.this, R.string.something_went_wrong,
+                        Toast.makeText(getApplicationContext(), R.string.something_went_wrong,
                                 Toast.LENGTH_SHORT).show();
                         setMenuEnabled(true);
                     }

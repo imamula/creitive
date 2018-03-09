@@ -2,6 +2,7 @@ package ivan.mamula.creitive.Network;
 
 import ivan.mamula.creitive.Network.Models.LoginRequestBody;
 import ivan.mamula.creitive.Network.Models.LoginResponseModel;
+import ivan.mamula.creitive.Utils.Constants;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
@@ -16,10 +17,11 @@ import retrofit2.http.POST;
  */
 public interface RESTAPI {
     @Headers({
-            "Accept: application/json"
+            Constants.ACCEPT_HEADER
     })
 
     @POST("/login")
     Call<LoginResponseModel> login(@Body LoginRequestBody body,
-                                   @Header("Content-Type") String contentRange);
+                                   @Header(Constants.LOGIN_CONTENT_TYPE_HEADER_NAME)
+                                           String contentRange);
 }
