@@ -40,6 +40,7 @@ public class BlogsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blogs_list);
+        mIntentFilter.addAction(Constants.ACTION_CLOSE_BLOG_LIST_ACTIVITY);
         mProgressBar = findViewById(R.id.pb_blogs_list_progress_bar);
         mRecyclerView = findViewById(R.id.rv_blogs_list_blogs);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
@@ -54,16 +55,20 @@ public class BlogsListActivity extends AppCompatActivity {
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (isNetworkAvailable()) {
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    if (mRecyclerView.getAdapter() == null
-                            || mRecyclerView.getAdapter().getItemCount() == 0) {
-                        getBlogs();
+                if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                    if (isNetworkAvailable()) {
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        if (mRecyclerView.getAdapter() == null
+                                || mRecyclerView.getAdapter().getItemCount() == 0) {
+                            getBlogs();
+                        }
+                        hideNoInternetDialog();
+                    } else {
+                        showNoInternetDialog();
+                        mRecyclerView.setVisibility(View.INVISIBLE);
                     }
-                    hideNoInternetDialog();
-                } else {
-                    showNoInternetDialog();
-                    mRecyclerView.setVisibility(View.INVISIBLE);
+                } else if (intent.getAction().equals(Constants.ACTION_CLOSE_BLOG_LIST_ACTIVITY)) {
+                    finish();
                 }
             }
         };
@@ -81,22 +86,37 @@ public class BlogsListActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<BlogListItem>> call,
                                            final Response<List<BlogListItem>> response) {
-                        if (response != null && response.body() != null
-                                && response.body().size() > 0) {
-                            final BlogsAdapter adapter = new BlogsAdapter(response.body()
-                                    , new BlogsAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(int position) {
-                                    int id = response.body().get(position).getId();
-                                    String title = response.body().get(position).getTitle();
-                                    Intent showBlogIntent = new Intent(BlogsListActivity.this,
-                                            BlogActivity.class);
-                                    showBlogIntent.putExtra(Constants.KEY_BLOG_ID, id);
-                                    showBlogIntent.putExtra(Constants.KEY_BLOG_TITLE, title);
-                                    startActivity(showBlogIntent);
-                                }
-                            });
-                            mRecyclerView.setAdapter(adapter);
+                        if (response != null && response.code() == 200) {
+                            if (response.body() != null
+                                    && response.body().size() > 0) {
+                                final BlogsAdapter adapter = new BlogsAdapter(response.body()
+                                        , new BlogsAdapter.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(int position) {
+                                        int id = response.body().get(position).getId();
+                                        String title = response.body().get(position).getTitle();
+                                        Intent showBlogIntent = new Intent(BlogsListActivity.this,
+                                                BlogActivity.class);
+                                        showBlogIntent.putExtra(Constants.KEY_BLOG_ID, id);
+                                        showBlogIntent.putExtra(Constants.KEY_BLOG_TITLE, title);
+                                        startActivity(showBlogIntent);
+                                    }
+                                });
+                                mRecyclerView.setAdapter(adapter);
+                            } else {
+                                Toast.makeText(getApplicationContext(), R.string.no_blogs,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (response.code() == 401) {
+                            Intent showLoginIntent = new Intent(BlogsListActivity.this,
+                                    LoginActivity.class);
+                            Constants.removeToken(getApplicationContext());
+                            startActivity(showLoginIntent);
+                            sendBroadcast(new Intent(Constants.ACTION_CLOSE_BLOG_ACTIVITY));
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.something_went_wrong,
+                                    Toast.LENGTH_SHORT).show();
                         }
                         setMenuEnabled(true);
                     }

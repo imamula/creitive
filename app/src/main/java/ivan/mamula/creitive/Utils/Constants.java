@@ -31,6 +31,8 @@ public class Constants {
     public static final String HTML_BASE_URL = "https://www.creitive.com";
     public static final String HTML_URL_BLOG="/blog";
     public static final String KEY_BLOG_CONTENT="saved_Web_COntent";
+    public static final String ACTION_CLOSE_BLOG_ACTIVITY="houston_we_have_a_problem";
+    public static final String ACTION_CLOSE_BLOG_LIST_ACTIVITY="problem_solved";
     public static void saveToken(String token, Context context) {
         getEditor(context).putString(KEY_TOKEN, token).commit();
     }
@@ -39,6 +41,9 @@ public class Constants {
         return getSharedPreferences(context).getString(KEY_TOKEN, null);
     }
 
+    public static void removeToken(Context context) {
+        getEditor(context).remove(KEY_TOKEN).commit();
+    }
     private static SharedPreferences getSharedPreferences(Context context) {
         if (mSharedPreferences == null) ;
         {

@@ -43,6 +43,7 @@ public class BlogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog);
+        mIntentFilter.addAction(Constants.ACTION_CLOSE_BLOG_ACTIVITY);
         mBlogId = getIntent().getExtras().getInt(Constants.KEY_BLOG_ID, -1);
         String title = getIntent().getExtras().getString(Constants.KEY_BLOG_TITLE, null);
         if (title != null) {
@@ -86,15 +87,19 @@ public class BlogActivity extends AppCompatActivity {
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (isNetworkAvailable()) {
-                    mWebView.setVisibility(View.VISIBLE);
-                    if (!mIsLoadingFinished) {
-                        getBlog(mBlogId);
+                if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                    if (isNetworkAvailable()) {
+                        mWebView.setVisibility(View.VISIBLE);
+                        if (!mIsLoadingFinished) {
+                            getBlog(mBlogId);
+                        }
+                        hideNoInternetDialog();
+                    } else {
+                        showNoInternetDialog();
+                        mWebView.setVisibility(View.INVISIBLE);
                     }
-                    hideNoInternetDialog();
-                } else {
-                    showNoInternetDialog();
-                    mWebView.setVisibility(View.INVISIBLE);
+                } else if (intent.getAction().equals(Constants.ACTION_CLOSE_BLOG_ACTIVITY)) {
+                    finish();
                 }
             }
         };
@@ -144,6 +149,17 @@ public class BlogActivity extends AppCompatActivity {
                                     Constants.HTML_MIME_TYPE,
                                     Constants.HTML_ENCODING,
                                     null);
+                        } else if (response.code() == 401) {
+                            Intent showLoginIntent = new Intent(BlogActivity.this,
+                                    LoginActivity.class);
+                            Constants.removeToken(getApplicationContext());
+                            startActivity(showLoginIntent);
+                            sendBroadcast(new Intent(Constants.ACTION_CLOSE_BLOG_LIST_ACTIVITY));
+                            finish();
+                        } else if (response.code() == 404) {
+                            Toast.makeText(getApplicationContext(), R.string.no_blog,
+                                    Toast.LENGTH_SHORT).show();
+                            onBackPressed();
                         } else {
                             Toast.makeText(getApplicationContext(), R.string.something_went_wrong,
                                     Toast.LENGTH_SHORT).show();
