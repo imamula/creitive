@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:paddingTop="@dimen/margin_16dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/margin_16dp">
 
 
     <TextView
         android:id="@+id/tv_item_blog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_56dp"
+        android:layout_marginLeft="@dimen/margin_72dp"
+        android:layout_marginRight="@dimen/margin_16dp"
         android:layout_marginTop="@dimen/margin_8dp"
         android:textStyle="bold" />
 
@@ -19,14 +20,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_item_blog_title"
         android:layout_marginBottom="@dimen/margin_8dp"
-        android:layout_marginLeft="@dimen/margin_56dp" />
+        android:layout_marginLeft="@dimen/margin_72dp"
+        android:layout_marginRight="@dimen/margin_16dp" />
 
     <ImageView
         android:id="@+id/iv_item_blog"
         android:layout_width="@dimen/list_image_size"
         android:layout_height="@dimen/list_image_size"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="@dimen/margin_4dp"
-        android:layout_alignTop="@id/tv_item_blog_title" />
+        android:layout_alignTop="@id/tv_item_blog_title"
+        android:layout_marginLeft="@dimen/margin_16dp"
+        android:layout_marginTop="@dimen/margin_4dp" />
 
 </RelativeLayout>

@@ -1,13 +1,14 @@
 package ivan.mamula.creitive;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.List;
 
@@ -27,23 +28,22 @@ public class BlogsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blogs_list);
-        mProgressBar=findViewById(R.id.pb_blogs_list_progress_bar);
-        mRecyclerView=findViewById(R.id.rv_blogs_list_blogs);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getApplicationContext(),
+        mProgressBar = findViewById(R.id.pb_blogs_list_progress_bar);
+        mRecyclerView = findViewById(R.id.rv_blogs_list_blogs);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
                 LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.
-                getContext(),
-                LinearLayoutManager.VERTICAL);
+        HorizontalDividerItemDecoration dividerItemDecoration = new HorizontalDividerItemDecoration
+                .Builder(getApplicationContext())
+                .marginResId(R.dimen.margin_72dp, R.dimen.margin_0dp)
+                .build();
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-
         getBlogs();
     }
-    private void getBlogs()
-    {
-        String token= Constants.getToken(getApplicationContext());
-        if(token==null)
-        {
+
+    private void getBlogs() {
+        String token = Constants.getToken(getApplicationContext());
+        if (token == null) {
             return;
         }
         setMenuEnabled(false);
@@ -52,10 +52,9 @@ public class BlogsListActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<BlogListItem>> call,
                                            Response<List<BlogListItem>> response) {
-                        if(response!=null&&response.body()!=null
-                                &&response.body().size()>0)
-                        {
-                            BlogsAdapter adapter= new BlogsAdapter(response.body());
+                        if (response != null && response.body() != null
+                                && response.body().size() > 0) {
+                            BlogsAdapter adapter = new BlogsAdapter(response.body());
                             mRecyclerView.setAdapter(adapter);
                         }
                         setMenuEnabled(true);
