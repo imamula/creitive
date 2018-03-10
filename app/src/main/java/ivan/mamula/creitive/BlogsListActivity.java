@@ -1,5 +1,6 @@
 package ivan.mamula.creitive;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,10 +52,22 @@ public class BlogsListActivity extends AppCompatActivity {
                 .enqueue(new Callback<List<BlogListItem>>() {
                     @Override
                     public void onResponse(Call<List<BlogListItem>> call,
-                                           Response<List<BlogListItem>> response) {
+                                           final Response<List<BlogListItem>> response) {
                         if (response != null && response.body() != null
                                 && response.body().size() > 0) {
-                            BlogsAdapter adapter = new BlogsAdapter(response.body());
+                            final BlogsAdapter adapter = new BlogsAdapter(response.body()
+                                    , new BlogsAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(int position) {
+                                    int id = response.body().get(position).getId();
+                                    String title = response.body().get(position).getTitle();
+                                    Intent showBlogIntent = new Intent(BlogsListActivity.this,
+                                            BlogActivity.class);
+                                    showBlogIntent.putExtra(Constants.KEY_BLOG_ID, id);
+                                    showBlogIntent.putExtra(Constants.KEY_BLOG_TITLE, title);
+                                    startActivity(showBlogIntent);
+                                }
+                            });
                             mRecyclerView.setAdapter(adapter);
                         }
                         setMenuEnabled(true);

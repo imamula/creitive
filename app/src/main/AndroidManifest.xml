@@ -22,6 +22,7 @@
         <activity
             android:name=".BlogsListActivity"
             android:label="@string/blogs" />
+        <activity android:name=".BlogActivity"></activity>
     </application>
 
 </manifest>

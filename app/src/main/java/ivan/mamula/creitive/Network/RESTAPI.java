@@ -3,6 +3,7 @@ package ivan.mamula.creitive.Network;
 import java.util.List;
 
 import ivan.mamula.creitive.Network.Models.BlogListItem;
+import ivan.mamula.creitive.Network.Models.BlogModel;
 import ivan.mamula.creitive.Network.Models.LoginRequestBody;
 import ivan.mamula.creitive.Network.Models.LoginResponseModel;
 import ivan.mamula.creitive.Utils.Constants;
@@ -12,6 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Created by Ivan Mamula on 3/9/18.
@@ -33,4 +35,11 @@ public interface RESTAPI {
     })
     @GET("/blogs")
     Call<List<BlogListItem>> getBlogs(@Header(Constants.X_AUTHORIZE_HEADER_NAME) String token);
+
+    @Headers({
+            Constants.ACCEPT_HEADER
+    })
+    @GET("/blogs/{blogId}")
+    Call<BlogModel> getBlog(@Header(Constants.X_AUTHORIZE_HEADER_NAME) String token,
+                                   @Path("blogId")String blogId);
 }

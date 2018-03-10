@@ -23,7 +23,13 @@ public class Constants {
     public static final String ACCEPT_HEADER = "Accept: application/json";
     public static final String WRONG_CREDENTIAL_MESSAGE = "unauthorized";
     public static final int PASSWORD_MIN_CHARS = 6;
-
+    public static final String KEY_BLOG_ID = "get_this_bloG";
+    public static final String KEY_BLOG_TITLE = "show_This_tiTle";
+    public static final String HTML_RESIZE_IMAGES = "<style>img{display: inline;height: auto;max-width: 100%;}</style>";
+    public static final String HTML_MIME_TYPE="text/html";
+    public static final String HTML_ENCODING="utf-8";
+    public static final String HTML_BASE_URL = "https://www.creitive.com";
+    public static final String HTML_URL_BLOG="/blog";
     public static void saveToken(String token, Context context) {
         getEditor(context).putString(KEY_TOKEN, token).commit();
     }
@@ -35,7 +41,8 @@ public class Constants {
     private static SharedPreferences getSharedPreferences(Context context) {
         if (mSharedPreferences == null) ;
         {
-            mSharedPreferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+            mSharedPreferences = context.getSharedPreferences(context.getPackageName(),
+                    Context.MODE_PRIVATE);
         }
         return mSharedPreferences;
     }

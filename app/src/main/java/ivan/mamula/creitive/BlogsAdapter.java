@@ -15,6 +15,7 @@ import java.util.List;
 
 import ivan.mamula.creitive.Network.Models.BlogListItem;
 
+
 /**
  * Created by Ivan Mamula on 3/9/18.
  * mamula82@gmail.com
@@ -24,18 +25,28 @@ import ivan.mamula.creitive.Network.Models.BlogListItem;
 public class BlogsAdapter extends RecyclerView.Adapter<BlogsAdapter.BlogViewHolder> {
 
     private List<BlogListItem> blogsItems;
-
-    public BlogsAdapter(List<BlogListItem> blogsItems) {
+    private OnItemClickListener onItemClickListener;
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    public BlogsAdapter(List<BlogListItem> blogsItems, OnItemClickListener onItemClickListener) {
         this.blogsItems = blogsItems;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
     public BlogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext())
+        final View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_blog, parent, false);
-
-        return new BlogViewHolder(itemView);
+        final BlogViewHolder blogViewHolder = new BlogViewHolder(itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClick(blogViewHolder.getAdapterPosition());
+            }
+        });
+        return blogViewHolder;
     }
 
     @Override
@@ -56,6 +67,7 @@ public class BlogsAdapter extends RecyclerView.Adapter<BlogsAdapter.BlogViewHold
             Glide.with(holder.imageView.getContext()).load(item.getImageUrl())
                     .into(holder.imageView);
         }
+
     }
 
     @Override
@@ -74,6 +86,7 @@ public class BlogsAdapter extends RecyclerView.Adapter<BlogsAdapter.BlogViewHold
             description = itemView.findViewById(R.id.tv_item_blog_description);
             imageView = itemView.findViewById(R.id.iv_item_blog);
         }
+
     }
 
     public BlogListItem getItemAtPosition(int postion) {
