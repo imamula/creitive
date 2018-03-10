@@ -1,7 +1,15 @@
 package ivan.mamula.creitive;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +32,9 @@ public class BlogsListActivity extends AppCompatActivity {
 
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
+    private Dialog mNetworkDialog;
+    private BroadcastReceiver mBroadcastReceiver;
+    private IntentFilter mIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,23 @@ public class BlogsListActivity extends AppCompatActivity {
                 .marginResId(R.dimen.margin_72dp, R.dimen.margin_0dp)
                 .build();
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+        makeNoInternetDialog();
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (isNetworkAvailable()) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    if (mRecyclerView.getAdapter() == null
+                            || mRecyclerView.getAdapter().getItemCount() == 0) {
+                        getBlogs();
+                    }
+                    hideNoInternetDialog();
+                } else {
+                    showNoInternetDialog();
+                    mRecyclerView.setVisibility(View.INVISIBLE);
+                }
+            }
+        };
         getBlogs();
     }
 
@@ -90,4 +118,51 @@ public class BlogsListActivity extends AppCompatActivity {
         }
         mRecyclerView.setEnabled(enabled);
     }
+
+    private void makeNoInternetDialog() {
+        AlertDialog.Builder aDBNet = new AlertDialog.Builder(this);
+        aDBNet.setTitle(R.string.no_internet_title);
+        aDBNet.setMessage(R.string.no_internet_message);
+        aDBNet.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        aDBNet.setCancelable(false);
+        mNetworkDialog = aDBNet.create();
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = ((ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null &&
+                connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public void showNoInternetDialog() {
+        if (mNetworkDialog != null && !mNetworkDialog.isShowing()) {
+            mNetworkDialog.show();
+        }
+    }
+
+    public void hideNoInternetDialog() {
+        if (mNetworkDialog != null && mNetworkDialog.isShowing()) {
+            mNetworkDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(mBroadcastReceiver, mIntentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mBroadcastReceiver);
+    }
+
 }

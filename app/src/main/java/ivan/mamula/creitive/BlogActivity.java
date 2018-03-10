@@ -1,9 +1,17 @@
 package ivan.mamula.creitive;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -24,12 +32,17 @@ public class BlogActivity extends AppCompatActivity {
 
     private ProgressBar mProgressBar;
     private WebView mWebView;
+    private Dialog mNetworkDialog;
+    private BroadcastReceiver mBroadcastReceiver;
+    private IntentFilter mIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    private int mBlogId;
+    private boolean mIsLoadingFinished = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blog);
-        int blogId = getIntent().getExtras().getInt(Constants.KEY_BLOG_ID, -1);
+        mBlogId = getIntent().getExtras().getInt(Constants.KEY_BLOG_ID, -1);
         String title = getIntent().getExtras().getString(Constants.KEY_BLOG_TITLE, null);
         if (title != null) {
             getSupportActionBar().setTitle(title);
@@ -57,6 +70,7 @@ public class BlogActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 setMenuEnabled(false);
+                mIsLoadingFinished=false;
 
             }
 
@@ -64,9 +78,26 @@ public class BlogActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 setMenuEnabled(true);
+                mIsLoadingFinished=true;
             }
         });
-        getBlog(blogId);
+        makeNoInternetDialog();
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (isNetworkAvailable()) {
+                    mWebView.setVisibility(View.VISIBLE);
+                    if (!mIsLoadingFinished) {
+                        getBlog(mBlogId);
+                    }
+                    hideNoInternetDialog();
+                } else {
+                    showNoInternetDialog();
+                    mWebView.setVisibility(View.INVISIBLE);
+                }
+            }
+        };
+        getBlog(mBlogId);
 
     }
 
@@ -114,5 +145,51 @@ public class BlogActivity extends AppCompatActivity {
                         setMenuEnabled(true);
                     }
                 });
+    }
+
+    private void makeNoInternetDialog() {
+        AlertDialog.Builder aDBNet = new AlertDialog.Builder(this);
+        aDBNet.setTitle(R.string.no_internet_title);
+        aDBNet.setMessage(R.string.no_internet_message);
+        aDBNet.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        aDBNet.setCancelable(false);
+        mNetworkDialog = aDBNet.create();
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = ((ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null &&
+                connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public void showNoInternetDialog() {
+        if (mNetworkDialog != null && !mNetworkDialog.isShowing()) {
+            mNetworkDialog.show();
+        }
+    }
+
+    public void hideNoInternetDialog() {
+        if (mNetworkDialog != null && mNetworkDialog.isShowing()) {
+            mNetworkDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(mBroadcastReceiver, mIntentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mBroadcastReceiver);
     }
 }

@@ -1,8 +1,15 @@
 package ivan.mamula.creitive;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +33,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mPassword;
     private Button mLogin;
     private InputMethodManager inputMethodManager;
+    private Dialog mNetworkDialog;
+    private BroadcastReceiver mBroadcastReceiver;
+    private IntentFilter mIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +47,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mPassword = findViewById(R.id.et_login_password);
         mLogin = findViewById(R.id.bt_login_login);
         mLogin.setOnClickListener(this);
-
+        makeNoInternetDialog();
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (isNetworkAvailable()) {
+                    hideNoInternetDialog();
+                } else {
+                    showNoInternetDialog();
+                }
+            }
+        };
 
     }
 
@@ -121,5 +141,51 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEmail.setEnabled(enabled);
         mPassword.setEnabled(enabled);
         mLogin.setEnabled(enabled);
+    }
+
+    private void makeNoInternetDialog() {
+        AlertDialog.Builder aDBNet = new AlertDialog.Builder(this);
+        aDBNet.setTitle(R.string.no_internet_title);
+        aDBNet.setMessage(R.string.no_internet_message);
+        aDBNet.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        aDBNet.setCancelable(false);
+        mNetworkDialog = aDBNet.create();
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = ((ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null &&
+                connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public void showNoInternetDialog() {
+        if (mNetworkDialog != null && !mNetworkDialog.isShowing()) {
+            mNetworkDialog.show();
+        }
+    }
+
+    public void hideNoInternetDialog() {
+        if (mNetworkDialog != null && mNetworkDialog.isShowing()) {
+            mNetworkDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(mBroadcastReceiver, mIntentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mBroadcastReceiver);
     }
 }
