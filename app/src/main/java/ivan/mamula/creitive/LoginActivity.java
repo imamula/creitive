@@ -111,11 +111,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     BlogsListActivity.class);
                             startActivity(showBlogsActivityIntent);
                             finish();
-                        } else if (response != null && response.message() != null
-                                && response.message()
-                                .equalsIgnoreCase(Constants.WRONG_CREDENTIAL_MESSAGE)) {
+                        } else if (response != null && response.code() == 401) {
                             Toast.makeText(getApplicationContext(), R.string.wrong_credentials,
                                     Toast.LENGTH_SHORT).show();
+
                         } else {
                             Toast.makeText(getApplicationContext(), R.string.something_went_wrong,
                                     Toast.LENGTH_SHORT).show();
