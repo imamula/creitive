@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -41,24 +40,22 @@ public class BlogsAdapter extends RecyclerView.Adapter<BlogsAdapter.BlogViewHold
 
     @Override
     public void onBindViewHolder(BlogViewHolder holder, int position) {
-        BlogListItem item=getItemAtPostion(position);
-        if(item.getTitle()!=null&&!item.getTitle().isEmpty()) {
+        BlogListItem item = getItemAtPosition(position);
+        if (item.getTitle() != null && !item.getTitle().isEmpty()) {
             holder.title.setText(item.getTitle());
         }
-        if(item.getDescription()!=null&&!item.getDescription().isEmpty()) {
+        if (item.getDescription() != null && !item.getDescription().isEmpty()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                holder.description.setText(Html.fromHtml(item.getDescription(),Html.FROM_HTML_MODE_COMPACT));
+                holder.description.setText(Html.fromHtml(item.getDescription(),
+                        Html.FROM_HTML_MODE_COMPACT));
             } else {
                 holder.description.setText(Html.fromHtml(item.getDescription()));
             }
         }
-        if(item.getImageUrl()!=null&&!item.getImageUrl().isEmpty())
-        {
+        if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
             Glide.with(holder.imageView.getContext()).load(item.getImageUrl())
-                    .apply(RequestOptions.circleCropTransform()).into(holder.imageView);
+                    .into(holder.imageView);
         }
-
-
     }
 
     @Override
@@ -79,8 +76,7 @@ public class BlogsAdapter extends RecyclerView.Adapter<BlogsAdapter.BlogViewHold
         }
     }
 
-    public BlogListItem getItemAtPostion(int postion)
-    {
+    public BlogListItem getItemAtPosition(int postion) {
         return blogsItems.get(postion);
     }
 }
