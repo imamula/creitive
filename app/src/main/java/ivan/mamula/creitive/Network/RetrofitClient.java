@@ -3,6 +3,7 @@ package ivan.mamula.creitive.Network;
 import android.content.Context;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import ivan.mamula.creitive.Utils.Constants;
 import okhttp3.Interceptor;
@@ -26,19 +27,21 @@ public class RetrofitClient {
         if (retrofit == null) {
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             httpClient.addInterceptor(new Interceptor() {
-                                          @Override
-                                          public Response intercept(Interceptor.Chain chain)
-                                                  throws IOException {
-                                              Request original = chain.request();
-                                              Request request = original.newBuilder()
-                                                      .header(Constants.ACCEPT_HEADER_NAME,
-                                                              Constants.ACCEPT_HEADER_VALUE)
-                                                      .method(original.method(), original.body())
-                                                      .build();
+                @Override
+                public Response intercept(Interceptor.Chain chain)
+                        throws IOException {
+                    Request original = chain.request();
+                    Request request = original.newBuilder()
+                            .header(Constants.ACCEPT_HEADER_NAME,
+                                    Constants.ACCEPT_HEADER_VALUE)
+                            .method(original.method(), original.body())
+                            .build();
 
-                                              return chain.proceed(request);
-                                          }
-                                      });
+                    return chain.proceed(request);
+                }
+            })
+                    .readTimeout(Constants.TIME_OUT_SECONDS, TimeUnit.SECONDS)
+                    .connectTimeout(Constants.TIME_OUT_SECONDS, TimeUnit.SECONDS);
             OkHttpClient client = httpClient.build();
             retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.BASE_URL)

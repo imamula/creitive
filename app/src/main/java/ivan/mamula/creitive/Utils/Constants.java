@@ -13,7 +13,7 @@ import android.content.SharedPreferences.Editor;
 public class Constants {
 
     public static final String BASE_URL = "http://blogsdemo.creitiveapps.com";
-    public static final int TIME_OUT_SECONDS = 10;
+    public static final int TIME_OUT_SECONDS = 3;
     public static final String KEY_TOKEN = "save_UsER_Token";
     private static SharedPreferences mSharedPreferences = null;
     private static Editor mEditor = null;
