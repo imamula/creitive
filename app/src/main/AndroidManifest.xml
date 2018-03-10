@@ -3,7 +3,7 @@
     package="ivan.mamula.creitive">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,10 +19,15 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/login" />
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/login"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".BlogsListActivity"
-            android:label="@string/blogs" />
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/blogs"
+            android:screenOrientation="portrait" />
         <activity android:name=".BlogActivity"></activity>
     </application>
 

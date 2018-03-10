@@ -30,6 +30,7 @@ public class Constants {
     public static final String HTML_ENCODING="utf-8";
     public static final String HTML_BASE_URL = "https://www.creitive.com";
     public static final String HTML_URL_BLOG="/blog";
+    public static final String KEY_BLOG_CONTENT="saved_Web_COntent";
     public static void saveToken(String token, Context context) {
         getEditor(context).putString(KEY_TOKEN, token).commit();
     }

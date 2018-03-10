@@ -37,6 +37,7 @@ public class BlogActivity extends AppCompatActivity {
     private IntentFilter mIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     private int mBlogId;
     private boolean mIsLoadingFinished = false;
+    private String mBlogData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class BlogActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 setMenuEnabled(false);
-                mIsLoadingFinished=false;
+                mIsLoadingFinished = false;
 
             }
 
@@ -78,7 +79,7 @@ public class BlogActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 setMenuEnabled(true);
-                mIsLoadingFinished=true;
+                mIsLoadingFinished = true;
             }
         });
         makeNoInternetDialog();
@@ -97,7 +98,19 @@ public class BlogActivity extends AppCompatActivity {
                 }
             }
         };
-        getBlog(mBlogId);
+
+        if (savedInstanceState != null) {
+            mBlogData = savedInstanceState.getString(Constants.KEY_BLOG_CONTENT, null);
+        }
+        if (mBlogData == null) {
+            getBlog(mBlogId);
+        } else {
+            mWebView.loadDataWithBaseURL(Constants.HTML_BASE_URL,
+                    mBlogData,
+                    Constants.HTML_MIME_TYPE,
+                    Constants.HTML_ENCODING,
+                    null);
+        }
 
     }
 
@@ -124,9 +137,10 @@ public class BlogActivity extends AppCompatActivity {
                         if (response != null && response.code() == 200 && response.body() != null
                                 && response.body().getContent() != null
                                 && !response.body().getContent().isEmpty()) {
+                            mBlogData = Constants.HTML_RESIZE_IMAGES +
+                                    response.body().getContent();
                             mWebView.loadDataWithBaseURL(Constants.HTML_BASE_URL,
-                                    Constants.HTML_RESIZE_IMAGES +
-                                            response.body().getContent(),
+                                    mBlogData,
                                     Constants.HTML_MIME_TYPE,
                                     Constants.HTML_ENCODING,
                                     null);
@@ -145,6 +159,14 @@ public class BlogActivity extends AppCompatActivity {
                         setMenuEnabled(true);
                     }
                 });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mBlogData != null) {
+            outState.putString(Constants.KEY_BLOG_CONTENT, mBlogData);
+        }
     }
 
     private void makeNoInternetDialog() {
