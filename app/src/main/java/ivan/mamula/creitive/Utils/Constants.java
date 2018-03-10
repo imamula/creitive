@@ -20,7 +20,8 @@ public class Constants {
     public static final String LOGIN_CONTENT_TYPE_HEADER_VALUE = "application/json";
     public static final String LOGIN_CONTENT_TYPE_HEADER_NAME = "Content-Type";
     public static final String X_AUTHORIZE_HEADER_NAME = "X-Authorize";
-    public static final String ACCEPT_HEADER = "Accept: application/json";
+    public static final String ACCEPT_HEADER_NAME = "Accept";
+    public static final String ACCEPT_HEADER_VALUE= "application/json";
     public static final String WRONG_CREDENTIAL_MESSAGE = "unauthorized";
     public static final int PASSWORD_MIN_CHARS = 6;
     public static final String KEY_BLOG_ID = "get_this_bloG";

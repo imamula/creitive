@@ -22,23 +22,16 @@ import retrofit2.http.Path;
  * +381(0)642035511
  */
 public interface RESTAPI {
-    @Headers({
-            Constants.ACCEPT_HEADER
-    })
+
 
     @POST("/login")
     Call<LoginResponseModel> login(@Body LoginRequestBody body,
-                                   @Header(Constants.LOGIN_CONTENT_TYPE_HEADER_NAME)
-                                           String contentRange);
-    @Headers({
-            Constants.ACCEPT_HEADER
-    })
+                                   @Header(Constants.LOGIN_CONTENT_TYPE_HEADER_NAME) String contentRange);
+
     @GET("/blogs")
     Call<List<BlogListItem>> getBlogs(@Header(Constants.X_AUTHORIZE_HEADER_NAME) String token);
 
-    @Headers({
-            Constants.ACCEPT_HEADER
-    })
+
     @GET("/blogs/{blogId}")
     Call<BlogModel> getBlog(@Header(Constants.X_AUTHORIZE_HEADER_NAME) String token,
                                    @Path("blogId")String blogId);
