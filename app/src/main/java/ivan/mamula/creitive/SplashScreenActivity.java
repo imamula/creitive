@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import ivan.mamula.creitive.Utils.Constants;
+
 public class SplashScreenActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN_DURATION = 1000;
 
@@ -17,9 +19,17 @@ public class SplashScreenActivity extends AppCompatActivity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Intent showLoginIntent = new Intent(SplashScreenActivity.this,
-                        LoginActivity.class);
-                startActivity(showLoginIntent);
+                Intent showNextScreenIntent;
+                if(Constants.getToken(getApplicationContext())==null) {
+                    showNextScreenIntent = new Intent(SplashScreenActivity.this,
+                            LoginActivity.class);
+                }
+                else
+                {
+                    showNextScreenIntent = new Intent(SplashScreenActivity.this,
+                            BlogsListActivity.class);
+                }
+                startActivity(showNextScreenIntent);
                 finish();
             }
         };
