@@ -1,4 +1,4 @@
-package ivan.mamula.creitive;
+package ivan.mamula.creitive.Adapters;
 
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +13,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import ivan.mamula.creitive.Network.Models.BlogListItem;
+import ivan.mamula.creitive.R;
+import ivan.mamula.creitive.Utils.Models.BlogListItem;
 
 
 /**

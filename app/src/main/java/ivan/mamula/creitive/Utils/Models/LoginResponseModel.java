@@ -1,4 +1,4 @@
-package ivan.mamula.creitive.Network.Models;
+package ivan.mamula.creitive.Utils.Models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

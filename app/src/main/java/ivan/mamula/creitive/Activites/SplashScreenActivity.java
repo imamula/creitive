@@ -1,10 +1,11 @@
-package ivan.mamula.creitive;
+package ivan.mamula.creitive.Activites;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import ivan.mamula.creitive.R;
 import ivan.mamula.creitive.Utils.Constants;
 
 public class SplashScreenActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package ivan.mamula.creitive;
+package ivan.mamula.creitive.Activites;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -20,8 +20,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import ivan.mamula.creitive.Network.Models.BlogModel;
-import ivan.mamula.creitive.Network.RetrofitClient;
+import ivan.mamula.creitive.Utils.Models.BlogModel;
+import ivan.mamula.creitive.Utils.Network.RetrofitClient;
+import ivan.mamula.creitive.R;
 import ivan.mamula.creitive.Utils.Constants;
 import retrofit2.Call;
 import retrofit2.Callback;

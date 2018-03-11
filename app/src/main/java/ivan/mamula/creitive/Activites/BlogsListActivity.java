@@ -1,4 +1,4 @@
-package ivan.mamula.creitive;
+package ivan.mamula.creitive.Activites;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,8 +21,10 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.List;
 
-import ivan.mamula.creitive.Network.Models.BlogListItem;
-import ivan.mamula.creitive.Network.RetrofitClient;
+import ivan.mamula.creitive.Adapters.BlogsAdapter;
+import ivan.mamula.creitive.Utils.Models.BlogListItem;
+import ivan.mamula.creitive.Utils.Network.RetrofitClient;
+import ivan.mamula.creitive.R;
 import ivan.mamula.creitive.Utils.Constants;
 import retrofit2.Call;
 import retrofit2.Callback;

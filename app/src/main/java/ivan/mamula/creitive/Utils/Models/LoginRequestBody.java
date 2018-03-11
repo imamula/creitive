@@ -1,4 +1,4 @@
-package ivan.mamula.creitive.Network.Models;
+package ivan.mamula.creitive.Utils.Models;
 
 /**
  * Created by Ivan Mamula on 3/9/18.

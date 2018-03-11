@@ -1,17 +1,16 @@
-package ivan.mamula.creitive.Network;
+package ivan.mamula.creitive.Utils.Network;
 
 import java.util.List;
 
-import ivan.mamula.creitive.Network.Models.BlogListItem;
-import ivan.mamula.creitive.Network.Models.BlogModel;
-import ivan.mamula.creitive.Network.Models.LoginRequestBody;
-import ivan.mamula.creitive.Network.Models.LoginResponseModel;
+import ivan.mamula.creitive.Utils.Models.BlogListItem;
+import ivan.mamula.creitive.Utils.Models.BlogModel;
+import ivan.mamula.creitive.Utils.Models.LoginRequestBody;
+import ivan.mamula.creitive.Utils.Models.LoginResponseModel;
 import ivan.mamula.creitive.Utils.Constants;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
